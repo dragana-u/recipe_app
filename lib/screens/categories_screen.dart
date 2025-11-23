@@ -59,27 +59,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     });
   }
 
-  // Future<void> _showRandomMeal() async {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false,
-  //     builder: (context) => const Center(child: CircularProgressIndicator()),
-  //   );
-  //
-  //   final randomMeal = await _apiService.getRandomMeal();
-  //
-  //   if (!mounted) return;
-  //   Navigator.pop(context);
-  //
-  //   if (randomMeal != null) {
-  //     Navigator.pushNamed(context, '/details', arguments: randomMeal);
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Грешка при вчитување на рецептот')),
-  //     );
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,21 +75,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [
-          // IconButton(
-          //   icon: const Icon(Icons.shuffle, color: Colors.white),
-          //   tooltip: 'Рандом рецепт',
-          //   onPressed: _showRandomMeal,
-          // ),
-        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.orange))
           : Column(
               children: [
                 _buildSearchBar(),
-                _buildCategoryCount(),
-                Expanded(child: _buildCategoriesGrid()),
+                Expanded(child: _buildCategoriesList()),
               ],
             ),
     );
@@ -161,19 +132,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     );
   }
 
-  Widget _buildCategoryCount() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Colors.orange[100]!, Colors.orange[50]!],
-        ),
-      )
-    );
-  }
-
-  Widget _buildCategoriesGrid() {
+  Widget _buildCategoriesList() {
     if (_filteredCategories.isEmpty && _searchQuery.isNotEmpty) {
       return Center(
         child: Column(
@@ -182,7 +141,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             Icon(Icons.search_off, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'Нема пронајдено категории',
+              'Нема категории со тоа име',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.grey[600],
@@ -199,20 +158,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: _loadCategories,
-      color: Colors.orange,
-      child: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-        ),
-        itemCount: _filteredCategories.length,
-        itemBuilder: (context, index) {
-          return CategoryCard(
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _filteredCategories.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: CategoryCard(
             category: _filteredCategories[index],
             onTap: () {
               Navigator.pushNamed(
@@ -221,9 +173,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 arguments: _filteredCategories[index],
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
