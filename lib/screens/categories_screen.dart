@@ -59,6 +59,24 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     });
   }
 
+  Future<void> _openRandomMeal() async {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    final meal = await _apiService.getRandomMeal();
+
+    if (!mounted) return;
+
+    Navigator.pop(context);
+
+    if (meal != null) {
+      Navigator.pushNamed(context, '/details', arguments: meal);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +93,30 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: TextButton.icon(
+              onPressed: _openRandomMeal,
+              style: TextButton.styleFrom(
+                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              icon: const Icon(Icons.shuffle, color: Colors.white, size: 20),
+              label: const Text(
+                "Random",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.orange))
