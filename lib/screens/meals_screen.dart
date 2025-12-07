@@ -111,6 +111,23 @@ class _MealsScreenState extends State<MealsScreen> {
           Expanded(child: _buildMealsGrid()),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/favorites');
+        },
+        backgroundColor: Colors.red[400],
+        icon: const Icon(Icons.favorite, color: Colors.white),
+        label: const Text(
+          'Омилени',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        elevation: 4,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

@@ -1,9 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_app/firebase_options.dart';
+import 'package:recipe_app/screens/favorite_meals_screen.dart';
 import 'package:recipe_app/screens/meal_details_screen.dart';
 import 'package:recipe_app/screens/meals_screen.dart';
+import 'package:recipe_app/services/notification_service.dart';
 import 'screens/categories_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  final notificationService = NotificationService();
+  await notificationService.initFCM();
+
   runApp(const MyApp());
 }
 
@@ -40,6 +51,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const CategoriesScreen(),
         '/meals': (context) => const MealsScreen(),
         '/details': (context) => const MealDetailsScreen(),
+        '/favorites': (context) => const FavoritesScreen(),
       },
     );
   }

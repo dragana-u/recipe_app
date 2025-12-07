@@ -121,11 +121,28 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(color: Colors.orange))
           : Column(
-              children: [
-                _buildSearchBar(),
-                Expanded(child: _buildCategoriesList()),
-              ],
-            ),
+        children: [
+          _buildSearchBar(),
+          Expanded(child: _buildCategoriesList()),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, '/favorites');
+        },
+        backgroundColor: Colors.red[400],
+        icon: const Icon(Icons.favorite, color: Colors.white),
+        label: const Text(
+          'Омилени',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        elevation: 4,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
